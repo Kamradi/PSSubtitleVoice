@@ -16,7 +16,7 @@ The interface supports **English and Russian**. Open Settings using the top-righ
 
 ## 2. Install and launch
 
-1. Download `PSSubtitleVoice-1.2.0-macOS-arm64.dmg` from [Releases](https://github.com/Kamradi/PSSubtitleVoice/releases/latest).
+1. Download `PSSubtitleVoice-1.2.1-macOS-arm64.dmg` from [Releases](https://github.com/Kamradi/PSSubtitleVoice/releases/latest).
 2. Open the DMG and drag **PS Subtitle Voice.app** to **Applications**.
 3. Eject the DMG. Launch the copy in **Applications**.
 4. The public release is ad-hoc signed and **not notarized by Apple**. If macOS blocks the first launch, try Finder's contextual **Open** action. If that is unavailable, use **System Settings → Privacy & Security → Open Anyway**, then confirm. Availability depends on your Mac's policy. You do not need to disable Gatekeeper globally.
@@ -65,6 +65,8 @@ Include both subtitle lines and the speaker label. Avoid minimaps, license plate
 
 The region overlay disappears when its settings window closes. Each game keeps its own region.
 
+**Dialogue only** filters menus, maps, objectives and location labels, including a check for top-of-frame menu navigation. In name mode a new line must include a speaker label; unnamed continuations are accepted within 12 seconds of the last dialogue line. An unrelated label clears that context. Enabled by default; disable it for unusual subtitle formats or use an appropriate mode for games without speaker names. This is heuristic filtering, not guaranteed game-state recognition.
+
 ## 6. Voices and characters
 
 Open the settings button at the top right → **Голоса** (Voices). Stop capture before changing routing mode or character assignments.
@@ -94,9 +96,11 @@ Add an exact assignment when a character is consistently misclassified. If OCR c
 
 Enrollment identifies a source speaker; it does **not** train a new TTS voice. Add a character, select an existing voice and capture clean examples using **Записать 12 секунд** (Record 12 seconds). At least two accepted examples and four seconds of speech are required. Music, overlapping voices and noise may cause rejection. Narration pauses during enrollment. Silero still generates the output voice.
 
-## 7. Included “ГТА 6” preset
+## 7. Example “ГТА 6” profile
 
-New installations start with this preset. Updates do not overwrite existing profiles.
+The **“ГТА 6”** profile is included as an example of voice assignments and subtitle-region settings. It uses **By subtitle speaker names** mode: to use it, **enable speaker names in the game’s own subtitle settings**. If the game does not support speaker names in subtitles, choose another narration mode. Check the name spellings and recognition region against your game.
+
+New installations start with this example profile. It is a starting point, not a universal configuration for every game or video. Updates do not overwrite existing profiles.
 
 | Setting | Value |
 | --- | --- |

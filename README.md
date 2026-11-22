@@ -27,9 +27,9 @@
 
 The ready-to-use build targets **Apple Silicon Macs running macOS 13+**. Translation requires **macOS 15+** and an initial Apple language download. The interface supports Russian and English; choose the language in Settings. The public build is **ad-hoc signed, not Apple-notarized**; see the installation guide.
 
-В релиз включён профиль **«ГТА 6»** с готовыми настройками. При обновлении существующие настройки сохраняются.
+Профиль **«ГТА 6»** добавлен как пример настройки голосов и области субтитров. Он использует режим **«По именам в субтитрах»**: для его работы включите отображение **имён говорящих персонажей в настройках субтитров самой игры**. Если игра не поддерживает имена в субтитрах, выберите другой режим озвучивания. Проверьте написание имён и область распознавания под свою игру. При обновлении существующие настройки сохраняются.
 
-The release includes a **“ГТА 6”** starter profile. Updates preserve existing settings.
+The **“ГТА 6”** profile is included as an example of voice assignments and subtitle-region settings. It uses **By subtitle speaker names** mode: to use it, **enable speaker names in the game’s own subtitle settings**. If the game does not support speaker names in subtitles, choose another narration mode. Check the name spellings and recognition region against your game. Updates preserve existing settings.
 
 ## Приватность / Privacy
 

@@ -43,9 +43,9 @@ Make a clean staging directory containing the finished app and a symlink named `
 
 ```sh
 hdiutil create -volname 'PS Subtitle Voice' -srcfolder build/Installer \
-  -format UDZO -imagekey zlib-level=6 Distribution/PSSubtitleVoice-1.2.0-macOS-arm64.dmg
-hdiutil verify Distribution/PSSubtitleVoice-1.2.0-macOS-arm64.dmg
-shasum -a 256 Distribution/PSSubtitleVoice-1.2.0-macOS-arm64.dmg
+  -format UDZO -imagekey zlib-level=6 Distribution/PSSubtitleVoice-1.2.1-macOS-arm64.dmg
+hdiutil verify Distribution/PSSubtitleVoice-1.2.1-macOS-arm64.dmg
+shasum -a 256 Distribution/PSSubtitleVoice-1.2.1-macOS-arm64.dmg
 ```
 
 Notarization and Developer ID distribution are not configured. No signing credentials, service tokens, user logs, hardware serials or enrolled speaker data should be committed or packaged.

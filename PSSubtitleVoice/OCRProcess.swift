@@ -62,7 +62,7 @@ final class OCRProcess {
         CGImageDestinationAddImage(destination, image, nil)
         guard CGImageDestinationFinalize(destination) else { throw failure("Не удалось сохранить временный кадр.") }
         let child = try connect()
-        var request = try JSONSerialization.data(withJSONObject: ["path": url.path, "height": region.height, "bottom": region.bottom, "width": region.width, "ignorePlates": region.ignoreVehiclePlates])
+        var request = try JSONSerialization.data(withJSONObject: ["path": url.path, "height": region.height, "bottom": region.bottom, "width": region.width, "ignorePlates": region.ignoreVehiclePlates, "dialogueOnly": region.dialogueOnly])
         request.append(10)
         try child.input.write(contentsOf: request)
         var response = Data()

@@ -70,5 +70,6 @@
   "rate": 1.1018486328125001,
   "regionHeight": 0.21000000000000002,
   "id": "7C016B80-7D23-4A6B-B4EB-CBC52C610001",
-  "maleVoice": "eugene"
+  "maleVoice": "eugene",
+  "dialogueOnly": true
 }

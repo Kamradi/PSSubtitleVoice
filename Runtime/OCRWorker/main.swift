@@ -13,7 +13,8 @@ while let line = readLine() {
             let region = SubtitleRegion(height: input["height"] as? Double ?? 0.3,
                                         bottom: input["bottom"] as? Double ?? 0,
                                         width: input["width"] as? Double ?? 0.92,
-                                        ignoreVehiclePlates: input["ignorePlates"] as? Bool ?? true)
+                                        ignoreVehiclePlates: input["ignorePlates"] as? Bool ?? true,
+                                        dialogueOnly: input["dialogueOnly"] as? Bool ?? false)
             let text = try SubtitleRecognition.text(in: image, region: region)
             let data = try JSONSerialization.data(withJSONObject: ["text": text])
             print(String(decoding: data, as: UTF8.self))

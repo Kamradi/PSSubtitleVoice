@@ -160,7 +160,7 @@
   "Недоступно": "Unavailable",
   "Готово к переводу": "Ready to translate",
   "Ожидаю загрузку языков…": "Waiting for language download…",
-  "PS Subtitle Voice · 1.2.0\nРазработано при участии OpenAI Codex.\nМодели и обработка работают на Mac.": "PS Subtitle Voice · 1.2.0\nDeveloped with assistance from OpenAI Codex.\nModels and processing run on your Mac.",
+  "PS Subtitle Voice · 1.2.1\nРазработано при участии OpenAI Codex.\nМодели и обработка работают на Mac.": "PS Subtitle Voice · 1.2.1\nDeveloped with assistance from OpenAI Codex.\nModels and processing run on your Mac.",
   "Обучение персонажам (%lld)": "Character enrollment (%lld)",
   "Обучение персонажам": "Character enrollment",
   "Включите перевод и подготовьте языки один раз.": "Enable translation and prepare languages once.",
@@ -168,5 +168,7 @@
   "Перевожу на русский…": "Translating to Russian…",
   "Английский → русский · локально · готов": "English → Russian · offline · ready",
   "Перевод отменён": "Translation canceled",
-  "Ошибка перевода: ": "Translation error: "
+  "Ошибка перевода: ": "Translation error: ",
+  "Только диалоги": "Dialogue only",
+  "Не читать меню, карту и задания. В режиме по именам новая реплика начинается с имени; продолжение без имени допускается в течение 12 секунд. Для нестандартных субтитров отключите фильтр.": "Skip menus, maps and objectives. In name mode, a new line starts with a speaker label; unnamed continuations are allowed within 12 seconds. Disable for unusual subtitle formats."
 }

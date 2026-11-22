@@ -35,6 +35,7 @@ final class SubtitleViewModel: ObservableObject {
             UserDefaults.standard.set(region.bottom, forKey: "regionBottom")
             UserDefaults.standard.set(region.width, forKey: "regionWidth")
             UserDefaults.standard.set(region.ignoreVehiclePlates, forKey: "ignoreVehiclePlates")
+            UserDefaults.standard.set(region.dialogueOnly, forKey: "dialogueOnly")
             saveCurrentGame()
         }
     }
@@ -167,7 +168,7 @@ final class SubtitleViewModel: ObservableObject {
     private func snapshotGame(id: String, name: String) -> GameProfile {
         GameProfile(id: id, name: name, mode: voiceMode, commonVoice: selectedSpeaker,
             maleVoice: maleVoice, femaleVoice: femaleVoice, rate: rate, volume: volume,
-            regionHeight: region.height, regionBottom: region.bottom, regionWidth: region.width, names: nameVoices, translateEnglish: translateEnglish, ignoreVehiclePlates: region.ignoreVehiclePlates, nameMaleVoice: nameMaleVoice, nameFemaleVoice: nameFemaleVoice)
+            regionHeight: region.height, regionBottom: region.bottom, regionWidth: region.width, names: nameVoices, translateEnglish: translateEnglish, ignoreVehiclePlates: region.ignoreVehiclePlates, dialogueOnly: region.dialogueOnly, nameMaleVoice: nameMaleVoice, nameFemaleVoice: nameFemaleVoice)
     }
 
     private func applyGame(_ game: GameProfile) {
@@ -177,7 +178,7 @@ final class SubtitleViewModel: ObservableObject {
         nameMaleVoice = game.nameMaleVoice ?? game.maleVoice
         nameFemaleVoice = game.nameFemaleVoice ?? game.femaleVoice
         rate = game.rate; volume = game.volume
-        region = SubtitleRegion(height: game.regionHeight, bottom: game.regionBottom, width: game.regionWidth, ignoreVehiclePlates: game.ignoreVehiclePlates ?? true)
+        region = SubtitleRegion(height: game.regionHeight, bottom: game.regionBottom, width: game.regionWidth, ignoreVehiclePlates: game.ignoreVehiclePlates ?? true, dialogueOnly: game.dialogueOnly ?? true)
         nameVoices = game.names
         if #available(macOS 15.0, *) { translateEnglish = game.translateEnglish ?? false }
         else { translateEnglish = false }
@@ -378,6 +379,7 @@ final class SubtitleViewModel: ObservableObject {
         guard engineReady, !capturing, !busy, sourceReady else { return }
         guard !translateEnglish || translation.ready else { status = "Подготовьте языки в настройках перевода перед захватом."; return }
         busy = true
+        gate.configureDialogueOnly(region.dialogueOnly, requiresSpeaker: voiceMode == "names")
         generation = UUID()
         let token = generation
         let result: (CGImage, String, String?, Double, Bool, Double) -> Void = { [weak self] image, text, speech, elapsed, nearlyBlack, began in
@@ -731,7 +733,7 @@ struct ContentView: View {
         .frame(minWidth: 1020, minHeight: 680)
         .disabled(model.gameBusy)
         .background(MovableWindow(isPresented: $settingsOpen, title: InterfaceLanguage.text("Настройки"), size: NSSize(width: 760, height: 560), content: settings.environment(\.locale, Locale(identifier: interfaceLanguage)), onClose: { model.saveCurrentGame() }).frame(width: 0, height: 0))
-        .background(MovableWindow(isPresented: $regionOpen, title: InterfaceLanguage.text("Область субтитров"), size: NSSize(width: 440, height: 400), content: regionSettings.environment(\.locale, Locale(identifier: interfaceLanguage)).frame(width: 440, height: 400).tint(accent), onClose: { model.saveCurrentGame() }).frame(width: 0, height: 0))
+        .background(MovableWindow(isPresented: $regionOpen, title: InterfaceLanguage.text("Область субтитров"), size: NSSize(width: 440, height: 470), content: regionSettings.environment(\.locale, Locale(identifier: interfaceLanguage)).frame(width: 440, height: 470).tint(accent), onClose: { model.saveCurrentGame() }).frame(width: 0, height: 0))
         .task { await model.refreshEngine(); if model.captureSource == "card" { await model.refreshCardDevices() } }
         .onReceive(NotificationCenter.default.publisher(for: .AVCaptureDeviceWasConnected)) { _ in
             if model.captureSource == "card" { Task { await model.refreshCardDevices() } }
@@ -1039,6 +1041,10 @@ struct ContentView: View {
                 regionSlider("Отступ снизу", value: $model.region.bottom, range: 0...0.45)
                 regionSlider("Ширина", value: $model.region.width, range: 0.30...1)
             }.disabled(model.capturing || model.busy)
+            Toggle(InterfaceLanguage.text("Только диалоги"), isOn: $model.region.dialogueOnly)
+                .disabled(model.capturing || model.busy)
+            Text(InterfaceLanguage.text("Не читать меню, карту и задания. В режиме по именам новая реплика начинается с имени; продолжение без имени допускается в течение 12 секунд. Для нестандартных субтитров отключите фильтр."))
+                .font(.caption).foregroundStyle(.secondary)
             Toggle(InterfaceLanguage.text("Фильтровать надписи на объектах"), isOn: $model.region.ignoreVehiclePlates)
                 .font(.callout).disabled(model.capturing || model.busy)
                 .help(InterfaceLanguage.text("Исключать номера, мелкие метки и отдельные надписи над субтитрами. Сохраняется для выбранной игры."))
@@ -1093,7 +1099,7 @@ struct ContentView: View {
             }
             TextEditor(text: $model.recognizedText).frame(height: 70).overlay(RoundedRectangle(cornerRadius: 6).stroke(.secondary.opacity(0.2)))
             Button(InterfaceLanguage.text("Произнести текст")) { model.speak(model.recognizedText) }.disabled(model.recognizedText.isEmpty || model.muted || !model.engineReady)
-            Text(InterfaceLanguage.text("PS Subtitle Voice · 1.2.0\nРазработано при участии OpenAI Codex.\nМодели и обработка работают на Mac."))
+            Text(InterfaceLanguage.text("PS Subtitle Voice · 1.2.1\nРазработано при участии OpenAI Codex.\nМодели и обработка работают на Mac."))
                 .font(.caption).foregroundStyle(.secondary)
             Spacer(minLength: 0)
         }.padding(24)

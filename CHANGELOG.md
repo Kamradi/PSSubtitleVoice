@@ -1,5 +1,14 @@
 # Changelog / История изменений
 
+## 1.2.1 — 2026-11-22
+
+- Профиль «ГТА 6» обозначен как пример; для режима по именам требуется включить имена говорящих в настройках субтитров самой игры.
+- The “ГТА 6” profile is documented as an example; name-based routing requires speaker names enabled in the game’s own subtitle settings.
+
+- «Только диалоги»: проверка верхней панели меню и фильтрация пунктов карты, меню и заданий.
+- В режиме по именам учитывается явное имя и недавнее продолжение; настройка сохраняется по играм.
+- Dialogue-only mode: top-menu detection plus map, menu and objective filtering, with per-game persistence and recent speaker context.
+
 ## 1.2.0 — 2026-11-22
 
 ### Русский

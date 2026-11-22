@@ -22,6 +22,7 @@ struct GameProfile: Codable, Identifiable {
     // Optional for backward-compatible decoding of existing profiles.
     var translateEnglish: Bool? = nil
     var ignoreVehiclePlates: Bool? = nil
+    var dialogueOnly: Bool? = nil
     var nameMaleVoice: String? = nil
     var nameFemaleVoice: String? = nil
 }

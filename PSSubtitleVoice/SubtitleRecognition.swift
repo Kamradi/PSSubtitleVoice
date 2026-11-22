@@ -7,6 +7,7 @@ struct SubtitleRegion {
     var bottom = 0.0
     var width = 0.92
     var ignoreVehiclePlates = true
+    var dialogueOnly = false
     var rect: CGRect { CGRect(x: (1 - width) / 2, y: bottom, width: width, height: height) }
 }
 
@@ -24,7 +25,22 @@ enum SubtitleRecognition {
         }
         request.recognitionLanguages = ["ru-RU", "en-US"].filter { supported.contains($0) }
         request.regionOfInterest = region.rect
-        try VNImageRequestHandler(cgImage: image).perform([request])
+        let handler = VNImageRequestHandler(cgImage: image)
+        if region.dialogueOnly {
+            // Look outside the subtitle ROI for persistent menu navigation.
+            // The narrow top band avoids a second full-frame OCR pass.
+            let menu = VNRecognizeTextRequest()
+            menu.usesCPUOnly = true
+            menu.recognitionLevel = .accurate
+            menu.recognitionLanguages = request.recognitionLanguages
+            menu.usesLanguageCorrection = false
+            menu.regionOfInterest = CGRect(x: 0, y: 0.85, width: 1, height: 0.15)
+            try handler.perform([menu])
+            if DialogueTextFilter.isMenuNavigation((menu.results ?? []).compactMap { $0.topCandidates(1).first?.string }.joined(separator: " ")) {
+                return ""
+            }
+        }
+        try handler.perform([request])
         let lines: [SubtitleTextFilter.Line] = (request.results ?? []).sorted {
             if abs($0.boundingBox.midY - $1.boundingBox.midY) < 0.015 {
                 return $0.boundingBox.minX < $1.boundingBox.minX
@@ -35,7 +51,8 @@ enum SubtitleRecognition {
             return SubtitleTextFilter.Line(text: candidate.string,
                 bounds: SubtitleTextFilter.frameBounds(observation.boundingBox, region: region.rect))
         }
-        let selected = region.ignoreVehiclePlates ? SubtitleTextFilter.subtitleRows(lines) : lines
+        var selected = region.ignoreVehiclePlates ? SubtitleTextFilter.subtitleRows(lines) : lines
+        if region.dialogueOnly { selected = selected.filter { !DialogueTextFilter.isInterfaceText($0.text) } }
         let joined = SubtitleTextFilter.filter(selected, enabled: region.ignoreVehiclePlates)
             .map(\.text).joined(separator: " ").trimmingCharacters(in: .whitespacesAndNewlines)
         return region.ignoreVehiclePlates ? SubtitleTextFilter.cleanEdges(joined) : joined
@@ -203,6 +220,8 @@ struct SubtitleTracker {
     var stabilitySeconds = 0.24
 
     mutating func reset() { self = SubtitleTracker(stabilitySeconds: stabilitySeconds) }
+
+    mutating func discardCandidate() { candidate = ""; candidateText = ""; count = 0 }
 
     mutating func release(_ text: String) {
         let output = Self.normalize(text)
@@ -542,11 +561,84 @@ struct SubtitleTracker {
     }
 }
 
+/// Only changes automatic capture. Manual text/screenshot narration stays available.
+struct DialogueTextFilter {
+    var enabled = false
+    var requiresSpeaker = false
+    private var lastDialogue = -Double.infinity
+    private(set) var reason = "disabled"
+
+    init(enabled: Bool = false, requiresSpeaker: Bool = false) {
+        self.enabled = enabled; self.requiresSpeaker = requiresSpeaker
+    }
+
+    mutating func reset() { lastDialogue = -.infinity }
+
+    mutating func allows(_ text: String, at time: TimeInterval) -> Bool {
+        guard enabled else { reason = "disabled"; return true }
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { reason = "empty"; return true }
+        if let speaker = Self.speakerLabel(trimmed), !Self.uiLabels.contains(speaker) {
+            lastDialogue = time; reason = "speaker_caption"; return true
+        }
+        let words = SubtitleTracker.normalize(trimmed).split(separator: " ")
+        let letters = trimmed.filter(\.isLetter)
+        let lower = letters.filter(\.isLowercase).count
+        let sentence = trimmed.last.map { ".!?…".contains($0) } == true
+            || (words.count >= 4 && trimmed.contains(","))
+        guard !Self.isMenuNavigation(trimmed), !Self.isInterfaceText(trimmed),
+              !letters.isEmpty, Double(lower) / Double(letters.count) >= 0.35,
+              sentence else {
+            lastDialogue = -.infinity; reason = "interface_or_label"; return false
+        }
+        if requiresSpeaker && time - lastDialogue > 12 {
+            reason = "no_recent_speaker"; return false
+        }
+        lastDialogue = time; reason = "dialogue_continuation"; return true
+    }
+
+    static func isMenuNavigation(_ text: String) -> Bool {
+        let words = Set(SubtitleTracker.normalize(text).split(separator: " ").map(String.init))
+        let markers: Set<String> = ["карта", "журнал", "прогресс", "настройки", "инвентарь", "статистика", "снаряжение", "навыки", "map", "journal", "progress", "settings", "inventory", "statistics", "equipment", "skills"]
+        return words.intersection(markers).count >= 3
+            || (words.contains("карта") && (words.contains("журнал") || words.contains("прогресс")))
+            || (words.contains("map") && (words.contains("journal") || words.contains("progress")))
+    }
+
+    private static let uiLabels: Set<String> = ["карта", "журнал", "прогресс", "настройки", "цель", "задание", "стоимость", "цена", "время", "расстояние", "масштаб", "награда", "map", "journal", "settings", "objective", "price", "time", "distance", "zoom"]
+    private static func speakerLabel(_ text: String) -> String? {
+        let regex = try! NSRegularExpression(pattern: "^\\s*[-–—]?\\s*(?:\\[([^\\]]{1,40})\\]\\s*:?|([\\p{L}][\\p{L}\\p{M}0-9 _'’.-]{0,39}):)\\s*(.+)$", options: [.dotMatchesLineSeparators])
+        let ns = text as NSString
+        guard let match = regex.firstMatch(in: text, range: NSRange(location: 0, length: ns.length)) else { return nil }
+        let name = ns.substring(with: match.range(at: match.range(at: 1).location == NSNotFound ? 2 : 1))
+        return SubtitleTracker.normalize(name)
+    }
+
+    static func isInterfaceText(_ text: String) -> Bool {
+        let key = SubtitleTracker.normalize(text)
+        let words = key.split(separator: " ")
+        if let first = words.first, uiLabels.contains(String(first)) { return true }
+        return ["направляйтесь", "доберитесь", "дождитесь", "поговорите", "закажите", "войдите", "найдите", "возьмите", "выберите", "нажмите", "добавить метку", "проложить маршрут", "отцентровать", "вернуться в игру", "select", "press", "set waypoint", "add marker", "resume game"].contains { key == $0 || key.hasPrefix($0 + " ") }
+    }
+}
+
 final class SubtitleGate {
     private let lock = NSLock()
     private var tracker = SubtitleTracker()
+    private var dialogue = DialogueTextFilter()
+    func configureDialogueOnly(_ enabled: Bool, requiresSpeaker: Bool) {
+        lock.lock(); defer { lock.unlock() }
+        dialogue = DialogueTextFilter(enabled: enabled, requiresSpeaker: requiresSpeaker)
+        tracker.reset()
+    }
     func process(_ text: String, at time: TimeInterval) -> (speech: String?, decision: String, began: TimeInterval) {
         lock.lock(); defer { lock.unlock() }
+        guard dialogue.allows(text, at: time) else {
+            // An excluded label must also clear a pending unstable OCR candidate.
+            // Reset just candidate state without committing a short-lived caption.
+            tracker.discardCandidate()
+            return (nil, "dialogue_filter_" + dialogue.reason, time)
+        }
         let speech = tracker.accept(text, at: time)
         return (speech, tracker.lastDecision, tracker.firstSeen)
     }
@@ -557,7 +649,7 @@ final class SubtitleGate {
     }
     func reset() {
         lock.lock(); defer { lock.unlock() }
-        tracker.reset()
+        tracker.reset(); dialogue.reset()
         DiagnosticLog.shared.record("subtitle.memory_reset")
     }
 }
