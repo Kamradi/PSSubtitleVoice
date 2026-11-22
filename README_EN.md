@@ -2,7 +2,7 @@
 
 [Русский](README_RU.md) · [Overview](README.md) · [Download](https://github.com/Kamradi/PSSubtitleVoice/releases/latest)
 
-PS Subtitle Voice reads visible game subtitles aloud on a Mac. Capture a PS5 through a USB HDMI capture card, or capture a browser window containing game footage. Silero synthesis runs locally. No software is installed on the console.
+PS Subtitle Voice reads game and video subtitles aloud on your Mac and translates English subtitles into Russian. Use any console, another computer or another device providing a compatible signal through a USB capture card, or narrate video directly from a browser or player window on your Mac. Processing runs locally. The app is free and open source.
 
 The interface supports **English and Russian**. Open Settings using the top-right button and choose **English** in the language selector. The choice is saved and applies immediately, including utility windows. This guide includes Russian labels for users switching from Russian. Interface language does not change subtitle recognition, narration language or game profiles.
 
@@ -10,7 +10,7 @@ The interface supports **English and Russian**. Open Settings using the top-righ
 
 - An Apple Silicon Mac. Primary testing was on M4; this repository does not provide a ready-made Intel or Windows release.
 - macOS 13 or newer for capture and narration; macOS 15 or newer for local translation.
-- PS5 capture: a macOS-compatible USB capture card, two HDMI cables and an appropriate USB connection. Tested hardware: AVerMedia StreamLine Mini+ GC311G2.
+- External source: a macOS-compatible USB capture card, a supported HDMI signal, the required HDMI cables and an appropriate USB connection. Tested hardware: AVerMedia StreamLine Mini+ GC311G2.
 - Window capture: a browser/player showing visible Russian or English subtitles.
 - The downloadable app includes Python, dependencies and models. End users do not need Xcode or a separate Python installation. See [BUILD.md](docs/BUILD.md) for source builds.
 
@@ -25,7 +25,9 @@ The interface supports **English and Russian**. Open Settings using the top-righ
 
 For updates, quit the old app, replace it in Applications and reopen it. Profiles live in the macOS app container, not inside the app bundle. A change in signing identity may cause macOS to ask for capture permissions again.
 
-## 3. Connect a PS5
+## 3. Capture-card sources — PS5 example
+
+Any source with a video output supported by your capture card can be used: a console, another computer or another compatible device. The **PS5 / карта** button covers the entire capture-card mode. Signal compatibility and protected-video restrictions depend on the source and card. The following is the tested PS5 setup.
 
 ```text
 PS5 HDMI OUT → capture card HDMI IN
@@ -42,10 +44,10 @@ capture card USB → Mac
 
 If you change USB ports, click **Обновить устройства** (Refresh devices) and check both selected inputs. Reconnecting hardware may change its video device identifier.
 
-## 4. Capture YouTube or another window
+## 4. Video on your Mac: browser or player
 
-1. Open game footage with visible Russian or English subtitles. Burned-in subtitles and visible subtitle overlays work.
-2. Select **Окно** (Window), then the browser window.
+1. Open an online video in a browser or a local video file in a player with visible Russian or English subtitles. Burned-in subtitles and visible subtitle overlays work.
+2. Select **Окно** (Window), then the browser or player window.
 3. Click **Обновить** (Refresh) if it is missing.
 4. Grant **Screen & System Audio Recording** access in macOS Privacy & Security. The section name varies by macOS version.
 5. Browser theater mode helps keep comments and page controls outside the OCR region. Recheck the region after resizing the window or video.

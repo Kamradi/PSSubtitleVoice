@@ -2,9 +2,9 @@
 
 # PS Subtitle Voice
 
-**Озвучивание игровых субтитров на Mac — локально, с PS5 через карту захвата или из окна браузера.**
+**PS Subtitle Voice — приложение для Mac, которое читает субтитры в играх и видео вслух, а английские переводит на русский. Работает с любым совместимым источником через карту захвата или с видео в окне на компьютере. Всё локально. Бесплатно и с открытым исходным кодом.**
 
-**Local game subtitle narration on Mac — capture PS5 through HDMI hardware or a browser window.**
+**PS Subtitle Voice reads game and video subtitles aloud on your Mac and translates English subtitles into Russian. Use any compatible source through a capture card, or a video playing in a window on your Mac. Processing runs locally. Free and open source.**
 
 [Скачать для macOS / Download](https://github.com/Kamradi/PSSubtitleVoice/releases/latest) · [Русская инструкция](README_RU.md) · [English guide](README_EN.md) · [Build from source](docs/BUILD.md)
 
