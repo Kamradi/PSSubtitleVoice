@@ -96,9 +96,9 @@ Add an exact assignment when a character is consistently misclassified. If OCR c
 
 Enrollment identifies a source speaker; it does **not** train a new TTS voice. Add a character, select an existing voice and capture clean examples using **Записать 12 секунд** (Record 12 seconds). At least two accepted examples and four seconds of speech are required. Music, overlapping voices and noise may cause rejection. Narration pauses during enrollment. Silero still generates the output voice.
 
-## 7. Example “ГТА 6” profile
+## 7. Example “GTA 6” profile
 
-The **“ГТА 6”** profile is included as an example of voice assignments and subtitle-region settings. It uses **By subtitle speaker names** mode: to use it, **enable speaker names in the game’s own subtitle settings**. If the game does not support speaker names in subtitles, choose another narration mode. Check the name spellings and recognition region against your game.
+The **“GTA 6”** profile is included as an example of voice assignments and subtitle-region settings. It uses **By subtitle speaker names** mode: to use it, **enable speaker names in the game’s own subtitle settings**. If the game does not support speaker names in subtitles, choose another narration mode. Check the name spellings and recognition region against your game.
 
 New installations start with this example profile. It is a starting point, not a universal configuration for every game or video. Updates do not overwrite existing profiles.
 

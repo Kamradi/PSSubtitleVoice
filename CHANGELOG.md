@@ -3,7 +3,7 @@
 ## 1.2.1 — 2026-11-22
 
 - Профиль «ГТА 6» обозначен как пример; для режима по именам требуется включить имена говорящих в настройках субтитров самой игры.
-- The “ГТА 6” profile is documented as an example; name-based routing requires speaker names enabled in the game’s own subtitle settings.
+- The “GTA 6” profile is documented as an example; name-based routing requires speaker names enabled in the game’s own subtitle settings.
 
 - «Только диалоги»: проверка верхней панели меню и фильтрация пунктов карты, меню и заданий.
 - В режиме по именам учитывается явное имя и недавнее продолжение; настройка сохраняется по играм.
@@ -29,7 +29,7 @@
 
 - Clean main window with one subtitle panel, preview and essential controls. Region overlay appears only while editing it.
 - Raw OCR, technical state and logs are available under Service settings.
-- First-run “ГТА 6” preset with voice mappings, region, speed, volume and translation settings. Existing profiles are preserved.
+- First-run “GTA 6” preset with voice mappings, region, speed, volume and translation settings. Existing profiles are preserved.
 - Includes the 1.1 fixes for duplicates, short missing lines, minor OCR errors and isolated OCR processing.
 - Name routing, default male/female voices, local translation and mixed Russian/English pronunciation.
 - Public source, bilingual guides, build scripts and third-party model notices.
