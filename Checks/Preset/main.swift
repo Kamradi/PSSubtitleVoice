@@ -1,0 +1,13 @@
+import Foundation
+let data = try Data(contentsOf: URL(fileURLWithPath: "PSSubtitleVoice/DefaultGame.json"))
+let game = try GameProfile.releasePreset(data: data)
+precondition(game.name == "ГТА 6" && game.mode == "names")
+precondition(game.commonVoice == "baya" && game.nameMaleVoice == "aidar" && game.nameFemaleVoice == "baya")
+precondition(game.names.first(where: { $0.name == "Лусия" })?.voice == "xenia")
+precondition(game.names.first(where: { $0.name == "Джейсон" })?.voice == "eugene")
+precondition(abs(game.regionHeight - 0.21) < 0.0001 && abs(game.regionBottom - 0.02) < 0.0001 && abs(game.regionWidth - 0.46) < 0.0001)
+precondition(abs(game.rate - 1.1018486328125001) < 0.000001)
+precondition(abs(game.volume - 0.490676925981873) < 0.000001)
+precondition(game.ignoreVehiclePlates == true && game.translateEnglish == true)
+precondition(game.names.count == 11)
+print("PASS: release preset matches the selected game settings")

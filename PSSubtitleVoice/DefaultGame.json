@@ -1,0 +1,74 @@
+{
+  "regionBottom": 0.02,
+  "commonVoice": "baya",
+  "mode": "names",
+  "translateEnglish": true,
+  "ignoreVehiclePlates": true,
+  "names": [
+    {
+      "name": "Лусия",
+      "id": "A204942E-E1F2-58DE-905D-D005C79941BA",
+      "voice": "xenia"
+    },
+    {
+      "name": "Джейсон",
+      "id": "F3242414-2246-51E7-A7FA-C7809063E520",
+      "voice": "eugene"
+    },
+    {
+      "name": "Местный житель",
+      "id": "5FC763BE-E82C-57F1-8652-43A052092FB5",
+      "voice": "aidar"
+    },
+    {
+      "name": "Местная жительница",
+      "id": "4885665F-A8BD-5A1E-91BE-DC7B3B8792F5",
+      "voice": "baya"
+    },
+    {
+      "name": "Охранник",
+      "id": "1230DEE1-DB20-5FC1-8DB1-1762FCB47BAA",
+      "voice": "aidar"
+    },
+    {
+      "name": "Охранница",
+      "id": "83A551AF-1382-51BC-B342-8A3498058597",
+      "voice": "baya"
+    },
+    {
+      "name": "Продавец",
+      "id": "C9B5789D-6BA4-539C-92BD-6701C5302DC0",
+      "voice": "aidar"
+    },
+    {
+      "name": "Продавщица",
+      "id": "A6280CA8-5AF7-54EF-8508-47F7351C312E",
+      "voice": "baya"
+    },
+    {
+      "name": "Водитель",
+      "id": "E0D6655A-8F8A-5034-9091-B99CFA0E4230",
+      "voice": "aidar"
+    },
+    {
+      "name": "Турист",
+      "id": "4ABF0988-BC2C-5FB4-9279-0F9555D67A4D",
+      "voice": "aidar"
+    },
+    {
+      "name": "Туристка",
+      "id": "62860233-1CBC-535A-B308-728A6CE272BC",
+      "voice": "baya"
+    }
+  ],
+  "nameMaleVoice": "aidar",
+  "nameFemaleVoice": "baya",
+  "name": "ГТА 6",
+  "femaleVoice": "xenia",
+  "regionWidth": 0.45999999999999996,
+  "volume": 0.490676925981873,
+  "rate": 1.1018486328125001,
+  "regionHeight": 0.21000000000000002,
+  "id": "7C016B80-7D23-4A6B-B4EB-CBC52C610001",
+  "maleVoice": "eugene"
+}
